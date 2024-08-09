@@ -1,18 +1,18 @@
 package com.slavapleshkov.springboot.bankingdemo.dto;
 
-import com.slavapleshkov.springboot.bankingdemo.entity.Insurance;
 import com.slavapleshkov.springboot.bankingdemo.entity.InsuranceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class AccountDto {
+public class InsuranceDto {
 
     private Long id;
-    private String accountHolderName;
-    private double balance;
-    private List<InsuranceType> insuranceList;
+    private InsuranceType insuranceType;
+    private double insuranceLimit;
+    private Long accountId;
+
 }

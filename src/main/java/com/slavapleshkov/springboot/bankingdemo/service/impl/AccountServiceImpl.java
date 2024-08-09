@@ -5,6 +5,7 @@ import com.slavapleshkov.springboot.bankingdemo.entity.Account;
 import com.slavapleshkov.springboot.bankingdemo.mapper.AccountMapper;
 import com.slavapleshkov.springboot.bankingdemo.repository.AccountRepository;
 import com.slavapleshkov.springboot.bankingdemo.service.AccountService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    public static final String ACCOUNT_NOT_EXIST = "Account does not exist";
+
+    public static final String ACCOUNT_NOT_FOUND = "Account not found with id: ";
 
     private final AccountRepository accountRepository;
 
@@ -34,16 +36,22 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto getAccountById(Long id) {
         Account account = accountRepository.
                 findById(id).orElseThrow(() ->
-                        new RuntimeException(ACCOUNT_NOT_EXIST));
+                        new EntityNotFoundException(ACCOUNT_NOT_FOUND + id));
 
         return AccountMapper.mapToAccountDto(account);
     }
 
     @Override
     public AccountDto deposit(Long id, double amount) {
+
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be positive.");
+        }
+
         Account account = accountRepository.
                 findById(id).orElseThrow(() ->
-                        new RuntimeException(ACCOUNT_NOT_EXIST));
+                        new EntityNotFoundException(ACCOUNT_NOT_FOUND + id));
+
         double total = account.getBalance() + amount;
         account.setBalance(total);
         Account savedAccount = accountRepository.save(account);
@@ -55,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto withdraw(Long id, double amount) {
         Account account = accountRepository.
                 findById(id).orElseThrow(() ->
-                        new RuntimeException(ACCOUNT_NOT_EXIST));
+                        new EntityNotFoundException(ACCOUNT_NOT_FOUND + id));
 
         if (account.getBalance() < amount) {
             throw new RuntimeException("Insifficient amount");
@@ -79,7 +87,7 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccount(Long id) {
         Account account = accountRepository.
                 findById(id).orElseThrow(() ->
-                        new RuntimeException(ACCOUNT_NOT_EXIST));
+                        new EntityNotFoundException(ACCOUNT_NOT_FOUND + id));
         accountRepository.delete(account);
 
     }
