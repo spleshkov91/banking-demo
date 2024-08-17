@@ -1,0 +1,9 @@
+services:
+  db-banking-api:
+    image: postgres:12
+    ports:
+      - 5444:5432
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: banking-api

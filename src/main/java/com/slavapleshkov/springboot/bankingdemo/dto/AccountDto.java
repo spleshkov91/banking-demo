@@ -1,6 +1,5 @@
 package com.slavapleshkov.springboot.bankingdemo.dto;
 
-import com.slavapleshkov.springboot.bankingdemo.entity.Insurance;
 import com.slavapleshkov.springboot.bankingdemo.entity.InsuranceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
